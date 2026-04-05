@@ -1,27 +1,29 @@
-# svelte-store
+# @free-walk/svelte-store
 
-Pinia 风格的 Svelte 5 状态管理库，基于 `svelte/store` 构建。
+A Pinia-style state management library for Svelte 5, built on `svelte/store`.
 
-## 特性
+[中文文档](./README.zh-CN.md)
 
-- 🏪 **Pinia 风格 API** — `defineStore` 定义 store，支持 Options API 和 Setup 风格
-- 📦 **基于 svelte/store** — 完全兼容 Svelte 生态，支持 `$store` 自动订阅
-- 🔌 **插件系统** — 支持全局插件，可扩展持久化、日志等功能
-- 🎯 **TypeScript** — 完整类型推导
-- ⚡ **轻量** — 零额外依赖，仅依赖 `svelte/store`
+## Features
 
-## 安装
+- **Pinia-style API** — `defineStore` with Options API and Setup style support
+- **Built on svelte/store** — fully compatible with Svelte ecosystem, supports `$store` auto-subscription
+- **Plugin system** — global plugins for persistence, logging, and more
+- **TypeScript** — full type inference
+- **Lightweight** — zero extra dependencies, relies only on `svelte/store`
+
+## Installation
 
 ```bash
-npm install svelte-store
+npm install @free-walk/svelte-store
 ```
 
-## 快速开始
+## Quick Start
 
-### Options API 风格
+### Options API Style
 
 ```ts
-import { defineStore } from 'svelte-store'
+import { defineStore } from '@free-walk/svelte-store'
 
 export const useCounterStore = defineStore('counter', {
   state: () => ({
@@ -46,10 +48,10 @@ export const useCounterStore = defineStore('counter', {
 })
 ```
 
-### Setup 风格
+### Setup Style
 
 ```ts
-import { defineStore, writable, derived } from 'svelte-store'
+import { defineStore, writable, derived } from '@free-walk/svelte-store'
 
 export const useCounterStore = defineStore('counter', () => {
   const count = writable(0)
@@ -67,7 +69,7 @@ export const useCounterStore = defineStore('counter', () => {
 })
 ```
 
-### 在组件中使用
+### Usage in Components
 
 ```svelte
 <script>
@@ -83,49 +85,48 @@ export const useCounterStore = defineStore('counter', () => {
 <button onclick={() => counter.decrement()}>-</button>
 ```
 
-## Store 实例 API
+## Store Instance API
 
-| 方法 / 属性 | 说明 |
-|---|---|
-| `$id` | Store 的唯一标识字符串 |
-| `$state` | 获取当前 state 快照 |
-| `$patch(partial)` | 批量更新 state（对象或函数） |
-| `$reset()` | 重置 state 到初始值（仅 Options API） |
-| `$subscribe(callback)` | 监听 state 变化，返回取消订阅函数 |
-| `subscribe(run)` | svelte/store 标准订阅接口 |
+| Method / Property | Description |
+|-------------------|-------------|
+| `$id` | Store's unique identifier string |
+| `$state` | Get current state snapshot |
+| `$patch(partial)` | Batch update state (object or function) |
+| `$reset()` | Reset state to initial value (Options API only) |
+| `$subscribe(callback)` | Listen for state changes, returns unsubscribe function |
+| `subscribe(run)` | Standard svelte/store subscription interface |
 
-### $patch 用法
+### $patch Usage
 
 ```ts
-// 对象方式
+// Object style
 counter.$patch({ count: 10 })
 
-// 函数方式
+// Function style
 counter.$patch((state) => {
   state.count++
   state.name = 'Updated'
 })
 ```
 
-### $subscribe 用法
+### $subscribe Usage
 
 ```ts
 const unsubscribe = counter.$subscribe((state) => {
-  console.log('state 变化:', state)
+  console.log('State changed:', state)
 })
 
-// 需要时取消订阅
+// Unsubscribe when needed
 unsubscribe()
 ```
 
-## 插件系统
+## Plugin System
 
 ```ts
-import { addPlugin } from 'svelte-store'
+import { addPlugin } from '@free-walk/svelte-store'
 
-// 持久化插件示例
+// Persistence plugin example
 addPlugin(({ store, storeId }) => {
-  // 恢复持久化数据
   const key = `svelte-store-${storeId}`
   const saved = localStorage.getItem(key)
   if (saved) {
@@ -134,13 +135,12 @@ addPlugin(({ store, storeId }) => {
     } catch {}
   }
 
-  // 监听变化并持久化
   store.$subscribe((state) => {
     localStorage.setItem(key, JSON.stringify(state))
   })
 })
 
-// 日志插件示例
+// Logging plugin example
 addPlugin(({ store, storeId }) => {
   store.$subscribe((state) => {
     console.log(`[${storeId}]`, state)
@@ -148,37 +148,37 @@ addPlugin(({ store, storeId }) => {
 })
 ```
 
-## 辅助函数
+## Helper Functions
 
 ### mapState
 
-从 store 中提取状态为独立的 Readable store：
+Extract state properties as individual Readable stores:
 
 ```ts
-import { mapState } from 'svelte-store'
+import { mapState } from '@free-walk/svelte-store'
 
 const { count, name } = mapState(useCounterStore, ['count', 'name'])
-// count 和 name 是 Readable<number> 和 Readable<string>
+// count and name are Readable<number> and Readable<string>
 ```
 
 ### mapActions
 
-从 store 中提取 actions 为独立函数：
+Extract actions as standalone functions:
 
 ```ts
-import { mapActions } from 'svelte-store'
+import { mapActions } from '@free-walk/svelte-store'
 
 const { increment, decrement } = mapActions(useCounterStore, ['increment', 'decrement'])
-increment() // 直接调用
+increment() // Call directly
 ```
 
-## 兼容性
+## Compatibility
 
-| 格式 | 文件 | 用途 |
-|---|---|---|
-| ESM | `dist/svelte-store.mjs` | `import` 语法 |
-| CJS | `dist/svelte-store.cjs` | `require()` 语法 |
-| Svelte 源码 | `src/index.ts` | Svelte 项目直接引用 |
+| Format | File | Usage |
+|--------|------|-------|
+| ESM | `dist/svelte-store.mjs` | `import` syntax |
+| CJS | `dist/svelte-store.cjs` | `require()` syntax |
+| Svelte Source | `src/index.ts` | Direct Svelte project import |
 
 ## License
 
