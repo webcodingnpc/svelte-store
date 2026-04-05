@@ -1,0 +1,45 @@
+{
+    "name": "@free-walk/svelte-store",
+    "version": "1.0.0",
+    "type": "module",
+    "description": "Pinia 风格的 Svelte 5 状态管理库，基于 svelte/store 构建",
+    "keywords": [
+        "svelte",
+        "svelte5",
+        "store",
+        "state-management",
+        "pinia"
+    ],
+    "license": "MIT",
+    "author": "free-walk",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/webcodingnpc/svelte-store.git"
+    },
+    "svelte": "./src/index.ts",
+    "main": "./dist/svelte-store.cjs",
+    "module": "./dist/svelte-store.mjs",
+    "exports": {
+        ".": {
+            "svelte": "./src/index.ts",
+            "import": "./dist/svelte-store.mjs",
+            "require": "./dist/svelte-store.cjs",
+            "default": "./dist/svelte-store.mjs"
+        }
+    },
+    "files": [
+        "dist",
+        "src",
+        "README.md"
+    ],
+    "scripts": {
+        "build": "node scripts/build.js"
+    },
+    "peerDependencies": {
+        "svelte": "^5.0.0"
+    },
+    "devDependencies": {
+        "esbuild": "^0.27.7",
+        "svelte": "^5.55.1"
+    }
+}
