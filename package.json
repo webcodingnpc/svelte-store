@@ -1,6 +1,6 @@
 {
     "name": "@free-walk/svelte-store",
-    "version": "1.1.0",
+    "version": "1.2.0",
     "type": "module",
     "description": "Pinia 风格的 Svelte 5 状态管理库，基于 svelte/store 构建",
     "keywords": [
