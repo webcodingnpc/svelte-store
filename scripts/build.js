@@ -45,6 +45,17 @@ await esbuild.build({
     outfile: path.join(DIST, 'svelte-store.cjs'),
 })
 
+// 3. 复制类型声明
+console.log('📦 复制类型声明...')
+const typesDir = path.join(DIST, 'types')
+fs.mkdirSync(typesDir, { recursive: true })
+const srcDir = path.join(ROOT, 'src')
+for (const f of fs.readdirSync(srcDir)) {
+    if (f.endsWith('.ts')) {
+        fs.copyFileSync(path.join(srcDir, f), path.join(typesDir, f))
+    }
+}
+
 // 输出构建结果
 console.log('\n✅ 构建完成！输出目录: dist/')
 const files = fs.readdirSync(DIST).filter(f => !fs.statSync(path.join(DIST, f)).isDirectory())

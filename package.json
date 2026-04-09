@@ -1,6 +1,6 @@
 {
     "name": "@free-walk/svelte-store",
-    "version": "1.2.0",
+    "version": "1.4.0",
     "type": "module",
     "description": "Pinia 风格的 Svelte 5 状态管理库，基于 svelte/store 构建",
     "keywords": [
@@ -19,6 +19,7 @@
     "svelte": "./src/index.ts",
     "main": "./dist/svelte-store.cjs",
     "module": "./dist/svelte-store.mjs",
+    "types": "./dist/types/index.ts",
     "exports": {
         ".": {
             "svelte": "./src/index.ts",
@@ -30,7 +31,8 @@
     "files": [
         "dist",
         "src",
-        "README.md","README.zh-CN.md"
+        "README.md",
+        "README.zh-CN.md"
     ],
     "scripts": {
         "build": "node scripts/build.js"
@@ -39,7 +41,7 @@
         "svelte": "^5.0.0"
     },
     "devDependencies": {
-        "esbuild": "^0.27.7",
-        "svelte": "^5.55.1"
+        "esbuild": "^0.28.0",
+        "svelte": "^5.55.2"
     }
 }
