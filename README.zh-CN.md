@@ -91,7 +91,9 @@ export const useCounterStore = defineStore('counter', () => {
 | `$state` | 获取当前 state 快照 |
 | `$patch(partial)` | 批量更新 state（对象或函数） |
 | `$reset()` | 重置 state 到初始值（仅 Options API） |
-| `$subscribe(callback)` | 监听 state 变化，返回取消订阅函数 |
+| `$subscribe(callback)` | 监听 state 变化（跳过初始值，仅在变更时触发） |
+| `$dispose()` | 销毁 store，清理所有内部订阅 |
+| `$onAction(callback)` | 监听 action 调用，支持 after/onError 钩子 |
 | `subscribe(run)` | svelte/store 标准订阅接口 |
 
 ### $patch 用法
@@ -116,6 +118,41 @@ const unsubscribe = counter.$subscribe((state) => {
 
 // 需要时取消订阅
 unsubscribe()
+```
+
+### $onAction 用法
+
+```ts
+const unsubscribe = counter.$onAction(({ name, args, after, onError }) => {
+  console.log(`Action "${name}" 被调用，参数:`, args)
+
+  after((result) => {
+    console.log(`Action "${name}" 执行成功:`, result)
+  })
+
+  onError((error) => {
+    console.error(`Action "${name}" 执行失败:`, error)
+  })
+})
+```
+
+### $dispose 用法
+
+```ts
+// 销毁 store，清理所有订阅
+counter.$dispose()
+```
+
+### storeToRefs
+
+将 store 属性转为独立的 Readable store（类似 Pinia 的 `storeToRefs`）：
+
+```ts
+import { storeToRefs } from '@free-walk/svelte-store'
+
+const counter = useCounterStore()
+const { count, doubleCount } = storeToRefs(counter)
+// count 是 Readable<number>，doubleCount 是 Readable<number>
 ```
 
 ## 插件系统

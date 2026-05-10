@@ -93,7 +93,9 @@ export const useCounterStore = defineStore('counter', () => {
 | `$state` | Get current state snapshot |
 | `$patch(partial)` | Batch update state (object or function) |
 | `$reset()` | Reset state to initial value (Options API only) |
-| `$subscribe(callback)` | Listen for state changes, returns unsubscribe function |
+| `$subscribe(callback)` | Listen for state changes (skips initial value, fires only on changes) |
+| `$dispose()` | Destroy store, cleanup all internal subscriptions |
+| `$onAction(callback)` | Listen for action calls with after/onError hooks |
 | `subscribe(run)` | Standard svelte/store subscription interface |
 
 ### $patch Usage
@@ -118,6 +120,41 @@ const unsubscribe = counter.$subscribe((state) => {
 
 // Unsubscribe when needed
 unsubscribe()
+```
+
+### $onAction Usage
+
+```ts
+const unsubscribe = counter.$onAction(({ name, args, after, onError }) => {
+  console.log(`Action "${name}" called with args:`, args)
+
+  after((result) => {
+    console.log(`Action "${name}" finished with result:`, result)
+  })
+
+  onError((error) => {
+    console.error(`Action "${name}" failed:`, error)
+  })
+})
+```
+
+### $dispose Usage
+
+```ts
+// Destroy store, cleanup all subscriptions
+counter.$dispose()
+```
+
+### storeToRefs
+
+Convert store properties to individual Readable stores (like Pinia's `storeToRefs`):
+
+```ts
+import { storeToRefs } from '@free-walk/svelte-store'
+
+const counter = useCounterStore()
+const { count, doubleCount } = storeToRefs(counter)
+// count is Readable<number>, doubleCount is Readable<number>
 ```
 
 ## Plugin System
